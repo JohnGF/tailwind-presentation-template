@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind Slide Template</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for clean icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            oxfordblue: '#0A192F',
+            fculblue: '#3b82f6',
+            fculgreen: '#10b981',
+            tured: '#ef4444',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+    }
+    html.dark {
+      --bg-overlay: linear-gradient(180deg, rgba(10, 25, 47, 0.96) 0%, rgba(10, 25, 47, 0.99) 100%);
+    }
+    body {
+      overflow: hidden;
+    }
+    .slide-bg {
+      background: var(--bg-overlay);
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-oxfordblue transition-colors duration-300">
+
+  <!-- Main Presentation Container -->
+  <div class="flex h-screen w-screen relative overflow-hidden">
+    
+    <!-- LEFT PANEL: Slide Frame -->
+    <div class="flex-1 flex flex-col justify-between h-full p-4 lg:p-8 relative z-10">
+      
+      <!-- HEADER -->
+      <header class="flex justify-between items-center shrink-0 pb-2 border-b border-gray-200/50 dark:border-gray-800/50">
+        <div class="flex items-center space-x-2">
+          <!-- Standalone generic presentation logo -->
+          <div class="w-8 h-8 rounded-lg bg-fculblue flex items-center justify-center text-white shadow-md">
+            <i class="fa-solid fa-person-chalkboard text-xs"></i>
+          </div>
+          <div>
+            <h1 class="text-sm font-black text-slate-800 dark:text-white tracking-wide uppercase">Slides Engine</h1>
+            <p class="text-[10px] text-gray-400 font-medium">Tailwind CSS Presentation Template</p>
+          </div>
+        </div>
+        
+        <!-- TOP CONTROL MENU -->
+        <div class="flex items-center space-x-3">
+          <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800 transition-colors" title="Toggle Theme">
+            <i class="fa-solid fa-moon dark:hidden"></i>
+            <i class="fa-solid fa-sun hidden dark:block"></i>
+          </button>
+          <button id="btn-notes" class="px-3 py-1.5 rounded-md text-xs font-bold transition-all text-gray-500 hover:text-gray-900 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800" title="Presenter view">
+            <i class="fa-solid fa-clipboard-list mr-1"></i> Notes
+          </button>
+        </div>
+      </header>
+
+      <!-- SLIDE WINDOW -->
+      <main class="flex-1 flex items-center justify-center relative overflow-hidden my-4 lg:my-6 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900/60 shadow-xl transition-all duration-300 slide-bg">
+        <div id="slide-container" class="w-full h-full p-6 lg:p-12 relative overflow-y-auto">
+          <!-- Slide HTML is dynamically loaded here -->
+        </div>
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="shrink-0 flex items-center justify-between pt-2 border-t border-gray-200/50 dark:border-gray-800/50 text-[11px] text-gray-400">
+        <div>
+          <span id="slide-section" class="font-bold text-fculblue uppercase tracking-wider">Overview</span>
+        </div>
+        
+        <!-- NAV CONTROLS -->
+        <div class="flex items-center space-x-4">
+          <button id="btn-prev" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors disabled:opacity-30 disabled:pointer-events-none" title="Previous Slide">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+          </button>
+          <span class="font-semibold text-slate-700 dark:text-slate-300"><span id="slide-num-current">1</span> / <span id="slide-num-total">3</span></span>
+          <button id="btn-next" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors disabled:opacity-30 disabled:pointer-events-none" title="Next Slide">
+            <i class="fa-solid fa-chevron-right text-sm"></i>
+          </button>
+        </div>
+
+        <div class="hidden sm:block">
+          <span class="font-medium">Tailwind Slides Template</span>
+        </div>
+      </footer>
+      
+      <!-- PROGRESS BAR -->
+      <div class="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200 dark:bg-slate-800">
+        <div id="progress-fill" class="h-full bg-fculblue transition-all duration-300" style="width: 0%;"></div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: Backup Speaker Notes (Hidden by default, used if popup is blocked) -->
+    <div id="notes-panel" class="w-[380px] h-full bg-white dark:bg-slate-850 border-l border-gray-200 dark:border-gray-800 shadow-2xl z-20 flex flex-col justify-between hidden transform translate-x-full transition-transform duration-300">
+      <header class="p-4 border-b border-gray-150 dark:border-gray-800 flex justify-between items-center shrink-0">
+        <div class="flex items-center space-x-2 text-fculblue">
+          <i class="fa-solid fa-clipboard-list text-sm"></i>
+          <h3 class="font-bold text-sm text-oxfordblue dark:text-white uppercase tracking-wider">Backup Speaker Notes</h3>
+        </div>
+        <button id="close-notes-btn" class="p-1 rounded-md text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </header>
+      <main id="notes-content" class="flex-1 p-6 overflow-y-auto text-sm text-gray-600 dark:text-gray-300 leading-relaxed space-y-4">
+        <!-- Notes dynamically loaded here -->
+      </main>
+      <footer class="p-4 border-t border-gray-150 dark:border-gray-800 text-center text-[10px] text-gray-400 shrink-0">
+        Standalone Notes panel (Mirrored in the popup Presenter View)
+      </footer>
+    </div>
+
+  </div>
+
+  <!-- Dynamic JS Presenter Code -->
+  <script>
+    // --- 1. SLIDES DEFINITION ---
+    const slides = [
+      {
+        section: "1. Overview",
+        html: `
+          <div class="flex flex-col items-center justify-center text-center space-y-6 h-full py-8">
+              <div class="space-y-3">
+                  <span class="px-3 py-1 bg-fculblue/10 text-fculblue text-xs font-black rounded-full uppercase tracking-wider border border-fculblue/20">
+                      GitHub Open Source Template
+                  </span>
+                  <h1 class="text-3xl lg:text-5xl font-extrabold text-oxfordblue dark:text-white tracking-tight leading-tight">
+                      Tailwind CSS Slides <br><span class="text-fculblue">Presentation Template</span>
+                  </h1>
+                  <p class="text-sm lg:text-base text-gray-500 font-medium max-w-xl mx-auto">
+                      A beautiful, responsive HTML presentation engine with keyboard navigation, dark mode support, and synced split-screen speaker notes.
+                  </p>
+              </div>
+              
+              <div class="p-6 bg-slate-50 dark:bg-slate-800/80 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-md max-w-md w-full flex items-center space-x-4">
+                  <div class="p-3 bg-fculblue/10 text-fculblue rounded-2xl">
+                     <i class="fa-solid fa-keyboard text-lg"></i>
+                  </div>
+                  <div class="text-left">
+                     <h4 class="font-bold text-sm text-slate-800 dark:text-slate-200">Try Keyboard Shortcuts</h4>
+                     <p class="text-xs text-gray-500">Press Left/Right Arrow keys to navigate slides. Press "Space" to advance.</p>
+                  </div>
+              </div>
+          </div>
+        `
+      },
+      {
+        section: "2. Why Code Slides?",
+        html: `
+          <div class="space-y-4">
+              <div class="flex justify-between items-start gap-2">
+                  <div>
+                      <h2 class="text-2xl font-extrabold text-oxfordblue dark:text-white tracking-tight">Why Write Slides in HTML & Tailwind?</h2>
+                      <p class="text-xs text-gray-500 font-medium">Bypassing the limitations of traditional drag-and-drop presentation tools.</p>
+                  </div>
+                  <span class="px-2 py-0.5 bg-fculblue/10 text-fculblue text-[10px] font-bold rounded-lg uppercase tracking-wider border border-fculblue/20 shrink-0">
+                      Benefits
+                  </span>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-3">
+                  <!-- Benefit 1 -->
+                  <div class="p-5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm space-y-2">
+                      <div class="flex items-center space-x-2 text-fculblue">
+                          <i class="fa-solid fa-code text-sm"></i>
+                          <h3 class="font-black text-sm text-slate-800 dark:text-slate-200">Git Version Control</h3>
+                      </div>
+                      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                          Your slides are plain text files. Track layout edits, changes, and commits via Git, and collaborate with standard pull requests.
+                      </p>
+                  </div>
+                  <!-- Benefit 2 -->
+                  <div class="p-5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm space-y-2">
+                      <div class="flex items-center space-x-2 text-fculgreen">
+                          <i class="fa-solid fa-cube text-sm"></i>
+                          <h3 class="font-black text-sm text-slate-800 dark:text-slate-200">Infinite Interactivity</h3>
+                      </div>
+                      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                          Embed live JS widgets, scannable QR code components, vector charts, physics simulations, or working forms directly inside the slide grids.
+                      </p>
+                  </div>
+                  <!-- Benefit 3 -->
+                  <div class="p-5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm space-y-2">
+                      <div class="flex items-center space-x-2 text-tured">
+                          <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+                          <h3 class="font-black text-sm text-slate-800 dark:text-slate-200">Instant Publishing</h3>
+                      </div>
+                      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                          Deploy to GitHub Pages, Netlify, or Vercel with a single click. Share a standard, responsive URL that loads beautifully on both phone and laptop.
+                      </p>
+                  </div>
+              </div>
+          </div>
+        `
+      },
+      {
+        section: "3. Synced Presenter View",
+        html: `
+          <div class="space-y-4">
+              <div class="flex justify-between items-start gap-2">
+                  <div>
+                      <h2 class="text-2xl font-extrabold text-oxfordblue dark:text-white tracking-tight">Split-Screen Speaker Notes</h2>
+                      <p class="text-xs text-gray-500 font-medium">Automatic synchronization for smooth slide delivery.</p>
+                  </div>
+                  <span class="px-2 py-0.5 bg-fculgreen/10 text-fculgreen text-[10px] font-bold rounded-lg uppercase tracking-wider border border-fculgreen/20 shrink-0">
+                      Presenter View
+                  </span>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2 items-center">
+                  <div class="space-y-4 text-xs text-gray-600 dark:text-gray-400">
+                      <div class="flex items-start space-x-3 p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
+                          <div class="p-2 bg-fculblue/15 text-fculblue rounded-lg shrink-0">
+                              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                          </div>
+                          <div>
+                              <h4 class="font-bold text-slate-800 dark:text-slate-200">How to Open Presenter View</h4>
+                              <p class="mt-0.5">Click the <b>"Notes"</b> button in the top right. A separate window opens with your speaker scripts in a large, high-contrast font.</p>
+                          </div>
+                      </div>
+                      <div class="flex items-start space-x-3 p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
+                          <div class="p-2 bg-fculgreen/15 text-fculgreen rounded-lg shrink-0">
+                              <i class="fa-solid fa-arrows-spin"></i>
+                          </div>
+                          <div>
+                              <h4 class="font-bold text-slate-800 dark:text-slate-200 font-black">Bi-Directional Key Sync</h4>
+                              <p class="mt-0.5">Pressing Arrow keys or Spacebar in <b>either</b> window navigates slides and notes together. You can focus on reading notes while driving the presentation.</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="p-6 bg-slate-50 dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl flex flex-col justify-center text-center">
+                      <i class="fa-solid fa-laptop text-4xl text-fculblue mb-3"></i>
+                      <h4 class="font-bold text-sm text-slate-800 dark:text-slate-200">Dual Screen Optimization</h4>
+                      <p class="text-xs text-gray-500 mt-2 max-w-xs mx-auto">
+                          Drag the main presentation slide tab onto the auditorium projector screen, and keep the presenter notes window on your laptop screen.
+                      </p>
+                  </div>
+              </div>
+          </div>
+        `
+      }
+    ];
+
+    // --- 2. SPEAKER SCRIPTS DEFINITION ---
+    const speakerScripts = [
+      `<p>Welcome to your new Tailwind CSS Slides template! This deck runs completely in the browser as a standalone HTML page. It's designed to be clean, fast, and responsive. Press the Right Arrow or Spacebar to go to slide 2, or click the Notes button above to launch the synced presenter screen popup window.</p>`,
+      `<p>On this second slide, we highlight the benefits of writing slide decks in code. Because it is simple text, it's Git-friendly, meaning you have version control over your slides. Furthermore, you can write active JS logical widgets, embed polls or word clouds, and host it instantly on your personal GitHub Pages site.</p>`,
+      `<p>On this final slide, we showcase the split-screen presenter view. Clicking the Notes button opens a secondary window styled with a large, readable font. When you click or key navigate on either screen, they update each other automatically. Try opening the notes popup, focusing it, and pressing Arrow keys to see them navigate in sync.</p>`
+    ];
+
+    // --- 3. GLOBAL STATE & SELECTORS ---
+    let currentSlide = 0;
+    let isNotesVisible = false;
+    let notesWindow = null;
+
+    const slideContainer = document.getElementById("slide-container");
+    const slideSection = document.getElementById("slide-section");
+    const slideNumCurrent = document.getElementById("slide-num-current");
+    const slideNumTotal = document.getElementById("slide-num-total");
+    const progressFill = document.getElementById("progress-fill");
+    
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+    const btnNotes = document.getElementById("btn-notes");
+    
+    const notesPanel = document.getElementById("notes-panel");
+    const notesContent = document.getElementById("notes-content");
+    const closeNotesBtn = document.getElementById("close-notes-btn");
+    const themeToggle = document.getElementById("theme-toggle");
+
+    // --- 4. RENDER CONTROLLER ---
+    function init() {
+      slideNumTotal.textContent = slides.length;
+      renderSlide();
+    }
+
+    function renderSlide() {
+      const data = slides[currentSlide];
+      if (!data) return;
+
+      // Inject HTML content
+      slideContainer.innerHTML = data.html;
+      slideSection.textContent = data.section;
+      slideNumCurrent.textContent = currentSlide + 1;
+
+      // Update button states
+      btnPrev.disabled = currentSlide === 0;
+      btnNext.disabled = currentSlide === slides.length - 1;
+
+      // Update progress bar
+      const percentage = (currentSlide / (slides.length - 1)) * 100;
+      progressFill.style.width = `${percentage}%`;
+
+      updateNotes();
+    }
+
+    function toggleNotesMode(enabled) {
+      isNotesVisible = enabled;
+      if (isNotesVisible) {
+        notesPanel.classList.remove("hidden");
+        setTimeout(() => {
+          notesPanel.classList.remove("translate-x-full");
+        }, 10);
+        btnNotes.className =
+          "px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-fculblue text-white shadow-sm";
+        
+        // Open/focus external presenter notes window
+        if (!notesWindow || notesWindow.closed) {
+          try {
+            notesWindow = window.open("", "PresenterNotes", "width=800,height=600,menubar=no,toolbar=no,location=no,status=no");
+            if (notesWindow) {
+              notesWindow.document.write(`
+                <html>
+                  <head>
+                    <title>Presenter Notes - Tailwind Slide Template</title>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <script src="https://cdn.tailwindcss.com"><\/script>
+                    <style>
+                      body {
+                        font-family: 'Inter', sans-serif;
+                        background-color: #0f172a;
+                        color: #f1f5f9;
+                        padding: 2rem;
+                        margin: 0;
+                      }
+                      p {
+                        font-size: 1.55rem;
+                        line-height: 2.35rem;
+                        margin-bottom: 1.5rem;
+                      }
+                      strong {
+                        color: #3b82f6;
+                      }
+                    </style>
+                  </head>
+                  <body class="flex flex-col h-screen">
+                    <header class="flex justify-between items-center pb-4 border-b border-slate-700 mb-6 shrink-0">
+                      <div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Presenter View</span>
+                        <h1 class="text-xl font-bold text-slate-200" id="current-section">Overview</h1>
+                      </div>
+                      <div class="text-right">
+                        <span class="text-xs text-slate-400 block">Slide</span>
+                        <span class="text-lg font-black text-blue-400" id="slide-num">1</span>
+                      </div>
+                    </header>
+                    <main class="flex-1 overflow-y-auto pr-2 text-slate-300" id="notes-content">
+                      Loading notes...
+                    </main>
+                    <footer class="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-500 shrink-0 flex justify-between">
+                      <span>Tailwind CSS Slides Template</span>
+                      <span>Press Arrow keys to navigate slides</span>
+                    </footer>
+                    <script>
+                      window.addEventListener("keydown", (e) => {
+                        if (window.opener && !window.opener.closed) {
+                          if (e.key === "ArrowRight" || e.key === " ") {
+                            window.opener.document.getElementById("btn-next").click();
+                          } else if (e.key === "ArrowLeft") {
+                            window.opener.document.getElementById("btn-prev").click();
+                          }
+                        }
+                      });
+                    <\/script>
+                  </body>
+                </html>
+              `);
+              notesWindow.document.close();
+            }
+          } catch (err) {
+            console.warn("Could not open presenter notes popup window:", err);
+          }
+        } else {
+          notesWindow.focus();
+        }
+
+        updateNotes();
+      } else {
+        notesPanel.classList.add("translate-x-full");
+        setTimeout(() => {
+          notesPanel.classList.add("hidden");
+        }, 300);
+        btnNotes.className =
+          "px-3 py-1.5 rounded-md text-xs font-bold transition-all text-gray-500 hover:text-gray-900 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800";
+        
+        if (notesWindow && !notesWindow.closed) {
+          notesWindow.close();
+        }
+        notesWindow = null;
+      }
+    }
+
+    function updateNotes() {
+      const slideData = slides[currentSlide];
+      const sectionName = slideData ? slideData.section : "Overview";
+      const contentHtml = speakerScripts[currentSlide] || `<p class="text-slate-500 italic">No notes available for this slide.</p>`;
+      
+      if (notesContent) {
+        notesContent.innerHTML = contentHtml;
+      }
+
+      if (notesWindow && !notesWindow.closed) {
+        const doc = notesWindow.document;
+        const sectionEl = doc.getElementById("current-section");
+        const slideNumEl = doc.getElementById("slide-num");
+        const notesEl = doc.getElementById("notes-content");
+        
+        if (sectionEl) sectionEl.textContent = sectionName;
+        if (slideNumEl) slideNumEl.textContent = `${currentSlide + 1} / ${slides.length}`;
+        if (notesEl) notesEl.innerHTML = contentHtml;
+      }
+    }
+
+    // --- 5. BINDINGS & LISTENERS ---
+    btnNotes.addEventListener("click", () => toggleNotesMode(!isNotesVisible));
+    closeNotesBtn.addEventListener("click", () => toggleNotesMode(false));
+
+    btnPrev.addEventListener("click", () => {
+      if (currentSlide > 0) {
+        currentSlide--;
+        renderSlide();
+      }
+    });
+
+    btnNext.addEventListener("click", () => {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        renderSlide();
+      }
+    });
+
+    // Dark Mode Toggle
+    themeToggle.addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+    });
+
+    // Keyboard controls
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") {
+        if (currentSlide < slides.length - 1) {
+          currentSlide++;
+          renderSlide();
+        }
+      } else if (e.key === "ArrowLeft") {
+        if (currentSlide > 0) {
+          currentSlide--;
+          renderSlide();
+        }
+      } else if (e.key.toLowerCase() === "n") {
+        toggleNotesMode(!isNotesVisible);
+      }
+    });
+
+    // Auto-close notes window when parent closes
+    window.addEventListener("unload", () => {
+      if (notesWindow && !notesWindow.closed) {
+        notesWindow.close();
+      }
+    });
+
+    // Start
+    init();
+  </script>
+</body>
+</html>
