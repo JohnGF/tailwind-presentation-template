@@ -1,0 +1,24 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "A beautiful, responsive, and standalone HTML slideshow engine styled with **Tailwind CSS**. It is designed as a modern, code-first alternative to rigid LaTeX Beamer templates, Figma layouts, or traditional PowerPoint presentations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnGF/tailwind-presentation-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JohnGF/tailwind-presentation-template/issues"
+  },
+  "homepage": "https://github.com/JohnGF/tailwind-presentation-template#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.0"
+  }
+}

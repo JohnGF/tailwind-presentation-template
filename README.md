@@ -1,6 +1,8 @@
 # 📊 Tailwind CSS Presentation Template
 
-A beautiful, responsive, and standalone HTML slideshow engine styled with **Tailwind CSS**. It is designed as a modern, code-first alternative to rigid LaTeX Beamer templates, Figma layouts, or traditional PowerPoint presentations.
+![Tailwind Slides Cover Placeholder](https://via.placeholder.com/1200x600/0F172A/3B82F6?text=Tailwind+CSS+Presentation+Template)
+
+A beautiful, responsive, and standalone HTML slideshow engine styled with **Tailwind CSS**. Designed as a modern, code-first alternative to rigid LaTeX Beamer templates, Figma layouts, or traditional PowerPoint presentations.
 
 Live-sync **Presenter Split-Screen** speaker notes out of the box!
 
@@ -17,12 +19,54 @@ Live-sync **Presenter Split-Screen** speaker notes out of the box!
 
 ---
 
-## 🚀 How to Use
+## 🎨 Slide Layout Guide & Custom Tailwind Styling
 
-1. **Clone or Download:** Copy this folder.
-2. **Open in Browser:** Double-click `index.html` to open it locally.
-3. **Customize Slides:** Open `index.html` in your favorite code editor and scroll to the bottom where `const slides` is defined. Update the HTML structures in the array.
-4. **Customize Speaker Notes:** Edit the `const speakerScripts` array to write matching presenter text for each slide (HTML tag support included).
+The template is fully powered by Tailwind CSS. You can leverage the extensive utility classes provided by Tailwind to create customized, beautiful slide layouts. 
+
+### Slide Structure
+
+Slides are defined in the `const slides` array at the bottom of the `index.html` file. Each slide object requires a `section` string for the footer and an `html` string for the content:
+
+```javascript
+const slides = [
+  {
+    section: "1. Overview",
+    html: `
+      <div class="flex flex-col items-center justify-center h-full">
+        <h1 class="text-4xl font-bold text-slate-800 dark:text-white">Your Slide Title</h1>
+        <p class="text-gray-500 mt-4">Your slide content goes here.</p>
+      </div>
+    `
+  },
+  // ... more slides
+];
+```
+
+### Custom Theme Colors
+
+The template is configured with a few custom Tailwind colors out of the box that you can use across your slides:
+
+- `text-oxfordblue` / `bg-oxfordblue`: `#0A192F`
+- `text-fculblue` / `bg-fculblue`: `#3b82f6`
+- `text-fculgreen` / `bg-fculgreen`: `#10b981`
+- `text-tured` / `bg-tured`: `#ef4444`
+
+You can customize these by updating the `tailwind.config` script block in the `<head>` of `index.html`.
+
+---
+
+## 🚀 Quickstart Commands
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository_url>
+   cd tailwind-slide-template
+   ```
+2. **Open in Browser:** Double-click `index.html` to open it locally, or use a local server:
+   ```bash
+   npx serve .
+   ```
+3. **Customize Slides:** Open `index.html` in your code editor and edit `const slides` and `const speakerScripts` arrays.
 
 ---
 
