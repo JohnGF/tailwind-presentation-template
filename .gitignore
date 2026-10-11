@@ -4,3 +4,6 @@ Thumbs.db
 .directory
 *~
 *.swp
+node_modules/
+playwright-report/
+test-results/
